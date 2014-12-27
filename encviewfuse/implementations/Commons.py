@@ -140,6 +140,37 @@ class FullPaths(Action):
     """Expand user- and relative-paths"""
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, os.path.abspath(os.path.expanduser(values)))
+        
+class MountOptions(Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        resultObject = dict()
+        options = values.split(',')
+        
+        secret = [s for s in options if s.startswith("secret=")]
+        if len(secret) != 0:
+            resultObject["secret"] = secret[0][len("secret="):]
+        else:
+            secretFile = [s for s in options if s.startswith("secretfile=")][0][len("secretfile="):]
+            with open(secretFile, "r") as f:
+                resultObject["secret"] = f.read().strip()
+        
+        resultObject["segmentsize"] = None
+        maxFileSizeOptions = [s for s in options if s.startswith("segmentsize=")]
+        if len(maxFileSizeOptions) > 0:
+            resultObject["segmentsize"] = int(maxFileSizeOptions[0])
+            
+        interestingOptions = ["secret=", "secretfile=", "segmentsize="]
+        filteredOptions = filter(lambda x: not any(x.startswith(string) for string in interestingOptions), options)
+        otherOptions = dict()
+        for option in filteredOptions:
+            parts = option.split('=')
+            if len(parts) == 1:
+                otherOptions[parts[0]] = True
+            else:
+                otherOptions[parts[0]] = parts[1]
+        resultObject["other"] = otherOptions
+
+        setattr(namespace, self.dest, resultObject)
      
 def __is_dir(dirname):
     """Checks if a path is an actual directory"""
@@ -148,12 +179,31 @@ def __is_dir(dirname):
         raise ArgumentTypeError(msg)
     else:
         return dirname 
+    
+def __are_mount_options(options):
+    optionList = options.split(',')
+    
+    if "" in optionList:
+        raise ArgumentTypeError("Empty option given.")
+    
+    
+    if len([x for x in optionList if x.startswith("secret=")]) + \
+       len([x for x in optionList if x.startswith("secretfile=")]) != 1:
+        raise ArgumentTypeError("The secret xor secretfile option is mandatory.")
+    
+    maxFileSizeOptions = [x for x in optionList if x.startswith("segmentsize=")]
+    if len(maxFileSizeOptions) > 1:
+        raise ArgumentTypeError("Only one segment size option is allowed.")
+    if len(maxFileSizeOptions) == 1 and not maxFileSizeOptions[0][len("segmentsize="):].isdigit():
+        raise ArgumentTypeError("The segment size has to be a number.")
+        
+    return options
+
 
 def parseArguments():
     parser = ArgumentParser(description='Encrypted file system for large cloud backups')
-    parser.add_argument('-s', '--secret', type=str, required=True, dest='secretKey', help="the secret for the encryption")
-    parser.add_argument('-ms', '--maximum-file-size', type=int, default=None, dest='maxFileSize', help="the maximum file size of a single file in bytes.")
-    parser.add_argument('rootdir', action=FullPaths, type=__is_dir, help='the document root for the original files')
-    parser.add_argument('mountpoint', action=FullPaths, type=__is_dir, help='the mount point')
+    parser.add_argument('device', action=FullPaths, type=__is_dir, help='the document root for the original files')
+    parser.add_argument('dir', action=FullPaths, type=__is_dir, help='the mount point')
+    parser.add_argument("-o", action=MountOptions, type=__are_mount_options, required=True, dest='mountOptions', help='mount options')
     return parser.parse_args()
 

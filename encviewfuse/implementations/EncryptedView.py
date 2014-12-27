@@ -20,8 +20,8 @@ class PathDecryptor(object):
 
 class EncViewFuse(EncryptedViewFuseBase):
     
-    def __init__(self, root, secret, maxFileSize, *args, **kwargs):
-        super(EncViewFuse, self).__init__(root, secret, maxFileSize, SingleSegmentVirtualFileHandleContainer(), *args, **kwargs)
+    def __init__(self, root, secret, maxFileSize):
+        super(EncViewFuse, self).__init__(root, secret, maxFileSize, SingleSegmentVirtualFileHandleContainer())
         self.pathDecryptor = PathDecryptor(self.root, self.encryption)
         self.fileHandleContainer.setPathDecryptor(self.pathDecryptor)
 
@@ -103,7 +103,7 @@ class EncViewFuse(EncryptedViewFuseBase):
 
 def main():
     args = Commons.parseArguments()
-    fuse = FUSE(EncViewFuse(args.rootdir, args.secretKey, args.maxFileSize), args.mountpoint)
+    fuse = FUSE(EncViewFuse(args.device, args.mountOptions['secret'], args.mountOptions['segmentsize']), args.dir, **args.mountOptions['other'])
 
 if __name__ == '__main__':
     main()

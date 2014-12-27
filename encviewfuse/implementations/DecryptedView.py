@@ -73,7 +73,7 @@ class DecViewFuse(EncryptedViewFuseBase):
 
 def main():
     args = Commons.parseArguments()
-    fuse = FUSE(DecViewFuse(args.rootdir, args.secretKey, args.maxFileSize), args.mountpoint)
+    fuse = FUSE(DecViewFuse(args.device, args.mountOptions['secret'], args.mountOptions['segmentsize']), args.dir, **args.mountOptions['other'])
 
 if __name__ == '__main__':
     main()
