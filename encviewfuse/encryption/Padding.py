@@ -22,6 +22,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # ===================================================================
+from Crypto.Util.py3compat import bchr, bord
 
 """ Functions to manage padding
 
@@ -31,7 +32,7 @@ from data.
 
 __all__ = [ 'ValueError', 'pad', 'unpad' ]
 
-from Crypto.Util.py3compat import *
+#from Crypto.Util.py3compat import *
 
 
 def pad(data_to_pad, block_size, style='pkcs7'):

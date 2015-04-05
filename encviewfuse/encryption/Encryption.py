@@ -6,7 +6,7 @@ import os
 import binascii
 from builtins import str, isinstance
 from math import ceil
-from encviewfuse.virtualfiles.VirtualFile import VirtualFile
+from encviewfuse.filehandles.VirtualFile import VirtualFile
 
 class EncryptionException(Exception):
     def __init__(self, value):
@@ -24,11 +24,15 @@ class Encryption(object):
     FILENAME_KEYADDITION_LENGTH = 8 # max 32 bytes
     FILE_KEYADDITION_LENGTH = 16 # max 32 bytes
     
-    def __init__(self, secret):
+    def __init__(self, secret, fileSaltProvider, filenameSaltProvider):
         self.secret = secret.encode()
+        self.fileSaltProvider = fileSaltProvider
+        self.filenameSaltProvider = filenameSaltProvider
         
-    def encryptFileName(self, filename):
-        keyAddition = self.__getKeyAdditionFromPlainFileName(filename)
+    def encryptFileName(self, absRootPath, filename):
+        if not os.path.exists(absRootPath):
+            raise EncryptionException('The given path {0} does not refer to an existing path.'.format(absRootPath))
+        keyAddition = self.__getFilenameKeyAdditionFromPlainFileName(absRootPath)
         cipher = self.__createCipher(keyAddition)
         encryptedData = self.__encrypt(cipher, filename.encode())
         return base64.urlsafe_b64encode(keyAddition + encryptedData).decode()
@@ -38,14 +42,16 @@ class Encryption(object):
         cipher = self.__createCipher(keyAddition)
         return self.__decrypt(cipher, encryptedData).decode()
         
-    def encryptPath(self, path):
+    def encryptPath(self, rootDir, path):
         pathSegments = path.split(os.sep)
+        currentPath = rootDir
         encryptedPath = list()
         for pathSegment in pathSegments:
             if (len(pathSegment) == 0):
                 encryptedPath.append(pathSegment)
                 continue
-            encryptedPath.append(self.encryptFileName(pathSegment))
+            currentPath = os.path.realpath(os.path.join(currentPath, pathSegment))
+            encryptedPath.append(self.encryptFileName(currentPath, pathSegment))
         return os.sep.join(encryptedPath)
               
     def decryptPath(self, path):
@@ -99,7 +105,7 @@ class Encryption(object):
         readData = virtualFile.read(realDataBlockedOffset, realDataBlockedLength)
             
         if "fileCipher" not in virtualFile.encryptionDict().keys():
-            keyAddition = self.__getKeyAdditionFromPlainVirtualFile(virtualFile)
+            keyAddition = self.__getFileKeyAdditionFromPlainVirtualFile(virtualFile)
             cipher = self.__createCipher(keyAddition)
             virtualFile.encryptionDict()["fileCipher"] = cipher
             virtualFile.encryptionDict()["fileKeyAddition"] = keyAddition
@@ -136,16 +142,16 @@ class Encryption(object):
         
         
         
-    def __getKeyAdditionFromPlainFileName(self, filename):
+    def __getFilenameKeyAdditionFromPlainFileName(self, filename):
         assert isinstance(filename, str)
-        return SHA256.new(filename.encode()).digest()[0:Encryption.FILENAME_KEYADDITION_LENGTH]
+        salt = self.filenameSaltProvider.getSaltFor(filename)
+        return SHA256.new(salt.encode()).digest()[0:Encryption.FILENAME_KEYADDITION_LENGTH]
 
     
-    def __getKeyAdditionFromPlainVirtualFile(self, virtualFile):
+    def __getFileKeyAdditionFromPlainVirtualFile(self, virtualFile):
         assert isinstance(virtualFile, VirtualFile) 
-        mtime = str(int(virtualFile.mtime()))
-        filename = virtualFile.basename()
-        return SHA256.new((mtime + filename).encode()).digest()[0:Encryption.FILE_KEYADDITION_LENGTH]
+        salt = self.fileSaltProvider.getSaltFor(virtualFile.name())
+        return SHA256.new(salt.encode()).digest()[0:Encryption.FILE_KEYADDITION_LENGTH]
         
     def __getKeyAdditionFromEncryptedVirtualFile(self, virtualFile):
         assert isinstance(virtualFile, VirtualFile)

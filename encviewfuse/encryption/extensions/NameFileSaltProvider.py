@@ -1,0 +1,14 @@
+import os
+from encviewfuse.encryption.EncryptionExtensions import FileSaltProvider
+
+class NameFileSaltProvider(FileSaltProvider):
+    
+    def getId(self):
+        return "filename"
+    
+    def getSaltFor(self, absoluteFilePath):
+        if not os.path.exists(absoluteFilePath):
+            raise ValueError("The given path must exist.")
+        if not os.path.isfile(absoluteFilePath):
+            raise ValueError("The given path must be a file path.")
+        return os.path.basename(absoluteFilePath)
