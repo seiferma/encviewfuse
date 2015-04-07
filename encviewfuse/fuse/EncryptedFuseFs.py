@@ -1,9 +1,9 @@
 from encviewfuse.encryption.Encryption import MalformedInputException
-from encviewfuse.impl.FuseFsBase import FuseFsBase
+from encviewfuse.fuse._FuseFsBase import FuseFsBase
 from fuse import FUSE, FuseOSError
 from errno import ENOENT
 import os, stat, sys
-from encviewfuse.argparser.ArgumentParser import FuseArgumentParser,\
+from encviewfuse.fuse._ArgumentParser import FuseArgumentParser,\
     ArgumentParserError
 from encviewfuse.encryption.extensions.ExtensionRegistry import ExtensionRegistry
 from argparse import ArgumentTypeError

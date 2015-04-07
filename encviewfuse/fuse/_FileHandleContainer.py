@@ -1,5 +1,5 @@
 from threading import Lock
-from encviewfuse.filehandles.VirtualFile import VirtualFile
+from encviewfuse.encryption.VirtualFile import VirtualFile
 
 class FileHandleContainer(object):
     

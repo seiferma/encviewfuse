@@ -1,13 +1,13 @@
 import os, shutil, tempfile, unittest
-from encviewfuse.impl.EncryptedFuseFs import EncViewFuse
+from encviewfuse.fuse.EncryptedFuseFs import EncViewFuse
 from encviewfuse.encryption.Encryption import Encryption
 from collections import namedtuple
 import stat
 from fuse import FuseOSError
-from encviewfuse.filehandles.VirtualFile import VirtualFile
+from encviewfuse.encryption.VirtualFile import VirtualFile
 
 
-class EncryptedFuseFsTest(unittest.TestCase):
+class TestEncryptedFuseFs(unittest.TestCase):
 
     class _SaltProviderMock(object):
         def getSaltFor(self, absoluteFilePath):
@@ -15,8 +15,8 @@ class EncryptedFuseFsTest(unittest.TestCase):
 
     def setUp(self):
         self.rootDir = tempfile.mkdtemp()
-        self.dirStructure = EncryptedFuseFsTest.__setupRootDir(self.rootDir)
-        saltProvider = EncryptedFuseFsTest._SaltProviderMock()
+        self.dirStructure = TestEncryptedFuseFs.__setupRootDir(self.rootDir)
+        saltProvider = TestEncryptedFuseFs._SaltProviderMock()
         self.subject = EncViewFuse(self.rootDir, 'abc', saltProvider, saltProvider)
         self.encryption = Encryption('abc', saltProvider, saltProvider)
         
@@ -32,10 +32,10 @@ class EncryptedFuseFsTest(unittest.TestCase):
         # - dl1 (--> d2)
         resultObject = namedtuple('DirStructure', ['rootDir', 'f1', 'f2', 'd1', 'd2', 'fl1', 'dl1'])
         resultObject.rootDir = rootDir
-        resultObject.f1 = EncryptedFuseFsTest.__createFileWithRandomContent(rootDir, 7)
+        resultObject.f1 = TestEncryptedFuseFs.__createFileWithRandomContent(rootDir, 7)
         resultObject.d1 = tempfile.mkdtemp(dir=rootDir)
         resultObject.d2 = tempfile.mkdtemp(dir=rootDir)
-        resultObject.f2 = EncryptedFuseFsTest.__createFileWithRandomContent(resultObject.d1, 15)
+        resultObject.f2 = TestEncryptedFuseFs.__createFileWithRandomContent(resultObject.d1, 15)
         resultObject.fl1 = tempfile.mktemp(dir=resultObject.d2)
         os.symlink(resultObject.f2, resultObject.fl1)
         resultObject.dl1 = tempfile.mktemp(dir=rootDir)

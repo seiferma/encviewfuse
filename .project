@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>encview-fuse</name>
+	<name>encviewfuse.fuse</name>
 	<comment></comment>
 	<projects>
+		<project>encviewfuse.commons</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,11 +1,11 @@
 import unittest
-from encviewfuse.filehandles.FileHandleContainer import FileHandleContainer
+from encviewfuse.fuse._FileHandleContainer import FileHandleContainer
 import tempfile
 import shutil
 import os
 
 
-class FileHandleContainerTest(unittest.TestCase):
+class TestFileHandleContainer(unittest.TestCase):
 
     def setUp(self):
         self.subject = FileHandleContainer()

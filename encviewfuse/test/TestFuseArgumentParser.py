@@ -1,8 +1,8 @@
 import os, shutil, tempfile, unittest
-from encviewfuse.argparser.ArgumentParser import FuseArgumentParser, ArgumentParserError
+from encviewfuse.fuse._ArgumentParser import FuseArgumentParser, ArgumentParserError
 from argparse import ArgumentTypeError
 
-class FuseArgumentParserTest(unittest.TestCase):
+class TestFuseArgumentParser(unittest.TestCase):
 
     class _ExtensionRegistryMock(object):
         
@@ -10,24 +10,24 @@ class FuseArgumentParserTest(unittest.TestCase):
         FILENAME_SALT_PROVIDERS = ['fn0', 'fn1', 'fn2']
         
         def getFileSaltProvider(self, identifier):
-            if identifier not in FuseArgumentParserTest._ExtensionRegistryMock.FILE_SALT_PROVIDERS:
+            if identifier not in TestFuseArgumentParser._ExtensionRegistryMock.FILE_SALT_PROVIDERS:
                 raise ValueError()
             return identifier
     
         def getFileSaltProviderIds(self):
-            return FuseArgumentParserTest._ExtensionRegistryMock.FILE_SALT_PROVIDERS
+            return TestFuseArgumentParser._ExtensionRegistryMock.FILE_SALT_PROVIDERS
         
         def getFilenameSaltProvider(self, identifier):
-            if identifier not in FuseArgumentParserTest._ExtensionRegistryMock.FILENAME_SALT_PROVIDERS:
+            if identifier not in TestFuseArgumentParser._ExtensionRegistryMock.FILENAME_SALT_PROVIDERS:
                 raise ValueError()
             return identifier
         
         def getFilenameSaltProviderIds(self):
-            return FuseArgumentParserTest._ExtensionRegistryMock.FILENAME_SALT_PROVIDERS
+            return TestFuseArgumentParser._ExtensionRegistryMock.FILENAME_SALT_PROVIDERS
 
 
     def setUp(self):
-        self.subject = FuseArgumentParser(FuseArgumentParserTest._ExtensionRegistryMock())
+        self.subject = FuseArgumentParser(TestFuseArgumentParser._ExtensionRegistryMock())
         self.tmpDir1 = tempfile.mkdtemp()
         self.tmpDir2 = tempfile.mkdtemp()
         

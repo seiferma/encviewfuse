@@ -3,7 +3,7 @@ from encviewfuse.encryption.Encryption import Encryption
 from errno import EPERM, ENOENT
 from fuse import FuseOSError, Operations, LoggingMixIn
 import os
-from encviewfuse.filehandles.FileHandleContainer import FileHandleContainer
+from encviewfuse.fuse._FileHandleContainer import FileHandleContainer
 
 class FuseFsBase(LoggingMixIn, Operations, metaclass=ABCMeta):
     
