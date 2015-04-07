@@ -39,7 +39,7 @@ class TestEncryptedFuseFs(unittest.TestCase):
         resultObject.fl1 = tempfile.mktemp(dir=resultObject.d2)
         os.symlink(resultObject.f2, resultObject.fl1)
         resultObject.dl1 = tempfile.mktemp(dir=rootDir)
-        os.symlink(resultObject.d2, resultObject.dl1, target_is_directory=True)
+        os.symlink(resultObject.d2, resultObject.dl1, True)
         return resultObject
         
     
