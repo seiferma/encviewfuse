@@ -76,19 +76,21 @@ class TestEncryptedFuseFs(unittest.TestCase):
         filePath = self.dirStructure.f2
         filePathEncrypted =  self.__getEncryptedFilePath(filePath)
         
-        self.assertTrue(self.subject.access(filePathEncrypted, os.R_OK))
+        self.assertIsNone(self.subject.access(filePathEncrypted, os.R_OK), "No return value is expected if access is granted.")
         
     def testAccessWrite(self):
         filePath = self.dirStructure.f2
         filePathEncrypted =  self.__getEncryptedFilePath(filePath)
         
-        self.assertFalse(self.subject.access(filePathEncrypted, os.W_OK))
+        with self.assertRaises(FuseOSError) as _:
+            self.subject.access(filePathEncrypted, os.W_OK)
         
     def testAccessReadWrite(self):
         filePath = self.dirStructure.f2
         filePathEncrypted =  self.__getEncryptedFilePath(filePath)
         
-        self.assertFalse(self.subject.access(filePathEncrypted, os.W_OK | os.R_OK))
+        with self.assertRaises(FuseOSError) as _:
+            self.subject.access(filePathEncrypted, os.W_OK | os.R_OK)
         
     def testGetAttrFile(self):
         filePath = self.dirStructure.f2
