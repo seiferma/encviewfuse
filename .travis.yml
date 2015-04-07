@@ -1,0 +1,15 @@
+language: python
+python:
+- '3.2'
+- '3.3'
+- '3.4'
+install:
+- pip install .
+script: nosetests
+deploy:
+  provider: pypi
+  user: seiferma
+  password:
+    secure: GAW5qjrcshKkJ6famFXMK9bxYlSjGXcmP0tmH59WGJ4Y3O5CS0GQIRUl0GcxjQjxj2/YIPVzEVeLVjwWFKQy2/xjDnk9QZZL3b0T1nHP1gmcVjod9lJbBaSYvW0Zaf8r2ElMQ/WLrFfoyAQkYT/JSshJmSOXFrT+zGXt+vGmp+4=
+  on:
+    tags: true
