@@ -29,7 +29,7 @@ setup(
     ],
     keywords='encryption fuse view',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    install_requires=['fusepy'],
+    install_requires=['fusepy', 'encviewfuse.commons'],
     namespace_packages = ['encviewfuse'],
     entry_points={
         'console_scripts': [
