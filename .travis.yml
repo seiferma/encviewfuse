@@ -12,8 +12,14 @@ install:
 script: nosetests
 deploy:
   provider: pypi
+  server: https://pypi.python.org/pypi
   user: seiferma
   password:
-    secure: GAW5qjrcshKkJ6famFXMK9bxYlSjGXcmP0tmH59WGJ4Y3O5CS0GQIRUl0GcxjQjxj2/YIPVzEVeLVjwWFKQy2/xjDnk9QZZL3b0T1nHP1gmcVjod9lJbBaSYvW0Zaf8r2ElMQ/WLrFfoyAQkYT/JSshJmSOXFrT+zGXt+vGmp+4=
+    secure: Ok03/5xX2YYIob5s3NaW2sxLdRvhL96auL33rgIVXln1WdIakgP991yXrEC3b6fxiQdIWoVaPXZrfc3Ttq8InfcVylGKntTk3qluG8yjgFXonGmymEpWzJ/BufLergN0zjMs6n0MasX6JMM7vJ2rRGL8maqLJTx/Jf8e4qCDNqA=
   on:
     tags: true
+    condition: $TRAVIS_PYTHON_VERSION = '3.3'
+after_deploy:
+  - git clone https://github.com/seiferma/travis-utils.git
+  - python travis-utils/validate_pypi.py -v || exit 1
+
