@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from encviewfuse.encryption.Encryption import Encryption
+from deterministic_encryption_utils.encryption.Encryption import Encryption
 from errno import EPERM, ENOENT
 from fuse import FuseOSError, Operations, LoggingMixIn
 import os

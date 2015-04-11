@@ -1,11 +1,11 @@
-encviewfuse.fuse
-================
-.. image:: https://secure.travis-ci.org/seiferma/encviewfuse.fuse.png
-    :target: http://travis-ci.org/seiferma/encviewfuse.fuse
+encviewfuse
+===========
+.. image:: https://secure.travis-ci.org/seiferma/encviewfuse.png
+    :target: http://travis-ci.org/seiferma/encviewfuse
 
 Description
 -----------
-encviewfuse.fuse is a fuse filesystem that provides an encrypted view on a given directory. You can use it in conjunction with usual backup software without the requirement to save the files encrypted or provide additional space.
+encviewfuse is a fuse filesystem that provides an encrypted view on a given directory. You can use it in conjunction with usual backup software without the requirement to save the files encrypted or provide additional space.
 
 Installation
 ------------

@@ -1,11 +1,11 @@
-from encviewfuse.encryption.Encryption import MalformedInputException
+from deterministic_encryption_utils.encryption.Encryption import MalformedInputException
 from encviewfuse.fuse._FuseFsBase import FuseFsBase
 from fuse import FUSE, FuseOSError
 from errno import ENOENT
 import os, stat, sys
 from encviewfuse.fuse._ArgumentParser import FuseArgumentParser,\
     ArgumentParserError
-from encviewfuse.encryption.extensions.ExtensionRegistry import ExtensionRegistry
+from deterministic_encryption_utils.encryption.extensions.ExtensionRegistry import ExtensionRegistry
 from argparse import ArgumentTypeError
 
 

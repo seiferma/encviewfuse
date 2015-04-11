@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>encviewfuse.fuse</name>
+	<name>encviewfuse</name>
 	<comment></comment>
 	<projects>
-		<project>encviewfuse.commons</project>
+		<project>deterministic_encryption_utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

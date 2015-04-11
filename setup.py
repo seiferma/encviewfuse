@@ -8,11 +8,11 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='encviewfuse.fuse',
-    version='0.2.6',
+    name='encviewfuse',
+    version='0.3.0',
     description='A fuse implementation of an encrypted view on a given directory.',
     long_description=long_description,
-    url='https://github.com/seiferma/encviewfuse.fuse',
+    url='https://github.com/seiferma/encviewfuse',
     author='Stephan Seifermann',
     author_email='seiferma@t-online.de',
     license='MIT',
@@ -29,8 +29,7 @@ setup(
     ],
     keywords='encryption fuse view',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    install_requires=['fusepy', 'encviewfuse.commons'],
-    namespace_packages = ['encviewfuse'],
+    install_requires=['fusepy', 'deterministic_encryption_utils'],
     entry_points={
         'console_scripts': [
             'encviewfuse_fs=encviewfuse.fuse.EncryptedFuseFs:main'

@@ -1,10 +1,10 @@
 import os, shutil, tempfile, unittest
 from encviewfuse.fuse.EncryptedFuseFs import EncViewFuse
-from encviewfuse.encryption.Encryption import Encryption
+from deterministic_encryption_utils.encryption.Encryption import Encryption
 from collections import namedtuple
 import stat
 from fuse import FuseOSError
-from encviewfuse.encryption.VirtualFile import VirtualFile
+from deterministic_encryption_utils.encryption.VirtualFile import VirtualFile
 
 
 class TestEncryptedFuseFs(unittest.TestCase):
