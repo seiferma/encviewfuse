@@ -9,7 +9,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='encviewfuse',
-    version='0.3.0',
+    version='0.3.0.post1',
     description='A fuse implementation of an encrypted view on a given directory.',
     long_description=long_description,
     url='https://github.com/seiferma/encviewfuse',
