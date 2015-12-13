@@ -22,4 +22,4 @@ env:
   global:
   - DEPLOY_URL=https://pypi.python.org/pypi
   - DEPLOY_USER=seiferma
-  - secure: "ODXRflklJo0Lx2gMil+w9UNOWTkZx7V+pxjOV9TLFTZq/ZJNjnCzkKWLYzYKzqdldge/UpyfbltOXYuRnLdVFtRZ0wHDkdxhXayOAAuedS05qWaTSt+S/y8H20z3o3+35uuxpJp2h/7W8QNSJg6BFoNrJrV3XmlX3c1xLKaR0os="
+  - secure: "HVp8Ek5jEhTI6+C+ck1+ejr78iQSgOk5XsdgXCuJk5sTU0KNtPVl0QkwHOHA7kTJfhdePr4/vUfBPukkbI6etcOniCJqBV7E5Ntv/MmGuXk1srJqKW2ySMURnszn5Z1jcG9J3lAO/9JJ1rmyfu9ekvwhbCzdd1TpGZu49Xbc0y4="
